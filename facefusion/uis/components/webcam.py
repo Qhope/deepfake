@@ -66,7 +66,24 @@ def render() -> None:
 		value = wording.get('uis.stop_button'),
 		size = 'sm'
 	)
-
+	# with gradio.Blocks() as layout:
+	# 	with gradio.Row():
+	# 		WEBCAM_IMAGE = gradio.Image(
+	# 			label = wording.get('uis.webcam_image')
+	# 		)	
+	# 	with gradio.Row():
+	# 		with gradio.Column(scale=1):
+	# 			with gradio.Blocks():
+	# 				WEBCAM_START_BUTTON = gradio.Button(
+	# 					value = wording.get('uis.start_button'),
+	# 					variant = 'primary',
+	# 					size = 'sm')
+	# 		with gradio.Column(scale=1):
+	# 			with gradio.Blocks():
+	# 				WEBCAM_STOP_BUTTON = gradio.Button(
+	# 					value = wording.get('uis.stop_button'),
+	# 					size = 'sm'
+	# 				)
 
 def listen() -> None:
 	start_event = None

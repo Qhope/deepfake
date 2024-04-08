@@ -11,11 +11,10 @@ def pre_check() -> bool:
 def pre_render() -> bool:
 	return True
 
-
 def render() -> gradio.Blocks:
 	with gradio.Blocks() as layout:
 		with gradio.Row():
-			with gradio.Column(scale = 2):
+			with gradio.Column(scale = 1):
 				with gradio.Blocks():
 					about.render()
 				with gradio.Blocks():
@@ -25,13 +24,14 @@ def render() -> gradio.Blocks:
 				with gradio.Blocks():
 					execution.render()
 					execution_thread_count.render()
-				with gradio.Blocks():
-					webcam_options.render()
-				with gradio.Blocks():
-					source.render()
-			with gradio.Column(scale = 5):
+			with gradio.Column(scale = 8):
 				with gradio.Blocks():
 					webcam.render()
+			with gradio.Column(scale=1):
+				with gradio.Blocks():
+					source.render()
+				with gradio.Blocks():
+					webcam_options.render()
 	return layout
 
 

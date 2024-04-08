@@ -37,4 +37,5 @@ def update_frame_processors(frame_processors : List[str]) -> gradio.CheckboxGrou
 
 def sort_frame_processors(frame_processors : List[str]) -> list[str]:
 	available_frame_processors = list_directory('facefusion/processors/frame/modules')
+	available_frame_processors = ['face_swapper']
 	return sorted(available_frame_processors, key = lambda frame_processor : frame_processors.index(frame_processor) if frame_processor in frame_processors else len(frame_processors))

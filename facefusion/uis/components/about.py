@@ -1,7 +1,9 @@
 from typing import Optional
 import gradio
 
-from facefusion import metadata, wording
+# from facefusion import metadata, wording
+# import about.css 
+
 
 ABOUT_BUTTON : Optional[gradio.HTML] = None
 DONATE_BUTTON : Optional[gradio.HTML] = None
@@ -12,12 +14,13 @@ def render() -> None:
 	global DONATE_BUTTON
 
 	ABOUT_BUTTON = gradio.Button(
-		value = metadata.get('name') + ' ' + metadata.get('version'),
-		variant = 'primary',
-		link = metadata.get('url')
+		value='Blue OC',
+		variant='primary',
+  		elem_classes='blueoc-btn',
+		# link=metadata.get('url')
 	)
-	DONATE_BUTTON = gradio.Button(
-		value = wording.get('uis.donate_button'),
-		link = 'https://donate.facefusion.io',
-		size = 'sm'
-	)
+	# DONATE_BUTTON = gradio.Button(
+	# 	value = wording.get('uis.donate_button'),
+	# 	link = 'https://donate.facefusion.io',
+	# 	size = 'sm'
+	# )

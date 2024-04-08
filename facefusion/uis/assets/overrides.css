@@ -56,3 +56,7 @@
 {
 	border-bottom: 0.125rem solid;
 }
+.gradio-container{
+	/* margin: 5px !important; */
+	padding: 0 !important;
+}
