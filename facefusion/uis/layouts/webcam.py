@@ -117,7 +117,7 @@ def start_server():
     asyncio.set_event_loop(loop)
     socketServer = os.environ.get('SOCKET_SERVER', 'localhost')
     start_server = websockets.serve(server, socketServer, 8000)
-    print("Server started")
+    print("Server started: ",socketServer)
     loop.run_until_complete(start_server)
     print("Server running")
     loop.run_forever()
