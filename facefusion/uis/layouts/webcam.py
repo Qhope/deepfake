@@ -125,8 +125,9 @@ def start_server():
 
 def runUi(ui : gradio.Blocks):
     concurrency_count = min(2, multiprocessing.cpu_count())
+    server_name = os.environ.get('SERVER_NAME', '127.0.0.1')
     print("Running UI")
-    ui.queue(concurrency_count = concurrency_count).launch(show_api = False, quiet = True)
+    ui.queue(concurrency_count = concurrency_count).launch(show_api = False, quiet = True,server_name=server_name)
 	
  
 def run(ui : gradio.Blocks) -> None:
