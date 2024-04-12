@@ -23,11 +23,11 @@ def render() -> None:
 	WEBCAM_RESOLUTION_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.webcam_resolution_dropdown'),
 		choices = uis_choices.webcam_resolutions,
-		value = uis_choices.webcam_resolutions[0]
+		value = uis_choices.webcam_resolutions[3]
 	)
 	WEBCAM_FPS_SLIDER = gradio.Slider(
 		label = wording.get('uis.webcam_fps_slider'),
-		value = 25,
+		value = 8,
 		step = 1,
 		minimum = 1,
 		maximum = 60

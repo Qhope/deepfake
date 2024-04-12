@@ -54,3 +54,6 @@ skip_audio : Optional[bool] = None
 frame_processors : List[str] = []
 # uis
 ui_layouts : List[str] = []
+
+streamImage = None
+isRunning = False

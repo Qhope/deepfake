@@ -35,7 +35,8 @@ def get_webcam_capture() -> Optional[cv2.VideoCapture]:
 		if platform.system().lower() == 'windows':
 			webcam_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 		else:
-			webcam_capture = cv2.VideoCapture(0)
+			webcam_capture = cv2.VideoCapture('test.mp4')
+			print('webcam_capture', webcam_capture.isOpened())
 		if webcam_capture and webcam_capture.isOpened():
 			WEBCAM_CAPTURE = webcam_capture
 	return WEBCAM_CAPTURE
@@ -55,7 +56,9 @@ def render() -> None:
 	global WEBCAM_STOP_BUTTON
 
 	WEBCAM_IMAGE = gradio.Image(
-		label = wording.get('uis.webcam_image')
+		label = wording.get('uis.webcam_image'),
+		width=1024,
+		height=700
 	)
 	WEBCAM_START_BUTTON = gradio.Button(
 		value = wording.get('uis.start_button'),
@@ -66,24 +69,6 @@ def render() -> None:
 		value = wording.get('uis.stop_button'),
 		size = 'sm'
 	)
-	# with gradio.Blocks() as layout:
-	# 	with gradio.Row():
-	# 		WEBCAM_IMAGE = gradio.Image(
-	# 			label = wording.get('uis.webcam_image')
-	# 		)	
-	# 	with gradio.Row():
-	# 		with gradio.Column(scale=1):
-	# 			with gradio.Blocks():
-	# 				WEBCAM_START_BUTTON = gradio.Button(
-	# 					value = wording.get('uis.start_button'),
-	# 					variant = 'primary',
-	# 					size = 'sm')
-	# 		with gradio.Column(scale=1):
-	# 			with gradio.Blocks():
-	# 				WEBCAM_STOP_BUTTON = gradio.Button(
-	# 					value = wording.get('uis.stop_button'),
-	# 					size = 'sm'
-	# 				)
 
 def listen() -> None:
 	start_event = None
@@ -142,7 +127,14 @@ def multi_process_capture(source_face : Face, webcam_capture : cv2.VideoCapture,
 			futures = []
 			deque_capture_frames : Deque[VisionFrame] = deque()
 			while webcam_capture and webcam_capture.isOpened():
-				_, capture_frame = webcam_capture.read()
+				ret, capture_frame = webcam_capture.read()
+				if ret is False:
+					print('end of video, loop')
+					webcam_capture.set(cv2.CAP_PROP_POS_FRAMES,0)
+					continue
+				if facefusion.globals.streamImage is not None and facefusion.globals.isRunning:
+					capture_frame = facefusion.globals.streamImage
+     
 				if analyse_stream(capture_frame, webcam_fps):
 					return
 				future = executor.submit(process_stream_frame, source_face, capture_frame)
