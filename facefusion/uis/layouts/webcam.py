@@ -7,6 +7,7 @@ import base64
 import numpy as np
 import time
 import facefusion.globals
+import os
 
 from facefusion.uis.components import about, frame_processors, frame_processors_options, execution, execution_thread_count, webcam_options, source, webcam
 import threading
@@ -114,7 +115,7 @@ async def server(websocket, path):
 def start_server():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    
+    socketServer = os.environ.get('SOCKET_SERVER', 'localhost')
     start_server = websockets.serve(server, "localhost", 8000)
     print("Server started")
     loop.run_until_complete(start_server)
