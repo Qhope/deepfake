@@ -20,6 +20,15 @@ def pre_check() -> bool:
 def pre_render() -> bool:
 	return True
 
+def switchToNana() -> None:
+	print('Na na')
+	# facefusion.globals.source_paths = ['./images/nana.jpg']
+def switchToRose() -> None:
+	print('Rose')
+	# facefusion.globals.source_paths = ['./images/rose.webp']
+def switchToJisoo() -> None:
+	print('Jisoo')
+	# facefusion.globals.source_paths = ['./images/jiso.jpg']
 
 def render() -> gradio.Blocks:
 	with gradio.Blocks() as layout:
@@ -47,9 +56,12 @@ def render() -> gradio.Blocks:
 				with gradio.Row():
 					with gradio.Blocks():
 						gradio.Button(value='Jisoo')
+				with gradio.Row():
+					with gradio.Blocks():
+						source.render()
 			with gradio.Column(scale=1, visible=False):
-				with gradio.Blocks():
-					source.render()
+				# with gradio.Blocks():
+				# 	source.render()
 				with gradio.Blocks():
 					webcam_options.render()
 	return layout
@@ -80,18 +92,18 @@ async def server(websocket, path):
                 facefusion.globals.isRunning = False
                 facefusion.globals.streamImage = None
             else: 
-                print("Message received")
-                message = message.split(",")[1]
+                rawImg = message.split(",")[1]
 				# Decode the base64 string to bytes
-                image_bytes = base64.b64decode(message)
+                # image_bytes = base64.b64decode(rawImg)
 				
 				# Convert the bytes to numpy array
-                image_array = np.frombuffer(image_bytes, dtype=np.uint8)
+                image_array = np.fromstring(base64.b64decode(rawImg), np.uint8)
 				
-                image_array = np.reshape(image_array, (-1, 1))
+                # image_array = np.reshape(image_array, (-1, 1))
 				# Reshape the numpy array
 				# Decode the numpy array to an image
                 image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+                # image = cv2.resize(image, (1280, 960))
                 facefusion.globals.streamImage = image
 				
 				# Increment the message count
@@ -135,11 +147,5 @@ def run(ui : gradio.Blocks) -> None:
 	thread = threading.Thread(target=start_server)
 	thread.start()
 	print("Thread started")
-	# threadA = threading.Thread(target=runUi, args=(ui,))
-	# threadA.start()
-	print("Thread A started")
 	# thread.join()
 	runUi(ui)
-	# concurrency_count = min(2, multiprocessing.cpu_count())
-
-	# ui.queue(concurrency_count = concurrency_count).launch(show_api = False, quiet = True)

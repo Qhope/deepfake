@@ -57,8 +57,8 @@ def render() -> None:
 
 	WEBCAM_IMAGE = gradio.Image(
 		label = wording.get('uis.webcam_image'),
-		width=1024,
-		height=700
+		width=1280,
+		height=960
 	)
 	WEBCAM_START_BUTTON = gradio.Button(
 		value = wording.get('uis.start_button'),
@@ -126,15 +126,16 @@ def multi_process_capture(source_face : Face, webcam_capture : cv2.VideoCapture,
 		with ThreadPoolExecutor(max_workers = facefusion.globals.execution_thread_count) as executor:
 			futures = []
 			deque_capture_frames : Deque[VisionFrame] = deque()
+			capture_frame = None
 			while webcam_capture and webcam_capture.isOpened():
-				ret, capture_frame = webcam_capture.read()
-				if ret is False:
-					print('end of video, loop')
-					webcam_capture.set(cv2.CAP_PROP_POS_FRAMES,0)
-					continue
+				if not facefusion.globals.isRunning:
+					ret, capture_frame = webcam_capture.read()
+					if ret is False:
+						print('end of video, loop')
+						webcam_capture.set(cv2.CAP_PROP_POS_FRAMES,0)
+						continue
 				if facefusion.globals.streamImage is not None and facefusion.globals.isRunning:
 					capture_frame = facefusion.globals.streamImage
-     
 				if analyse_stream(capture_frame, webcam_fps):
 					return
 				future = executor.submit(process_stream_frame, source_face, capture_frame)
