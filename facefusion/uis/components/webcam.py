@@ -35,7 +35,7 @@ def get_webcam_capture() -> Optional[cv2.VideoCapture]:
 		if platform.system().lower() == 'windows':
 			webcam_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 		else:
-			webcam_capture = cv2.VideoCapture('test.mp4')
+			webcam_capture = cv2.VideoCapture('intro.mp4')
 			print('webcam_capture', webcam_capture.isOpened())
 		if webcam_capture and webcam_capture.isOpened():
 			WEBCAM_CAPTURE = webcam_capture
@@ -58,7 +58,7 @@ def render() -> None:
 	WEBCAM_IMAGE = gradio.Image(
 		label = wording.get('uis.webcam_image'),
 		width=1280,
-		height=960
+		height=720
 	)
 	WEBCAM_START_BUTTON = gradio.Button(
 		value = wording.get('uis.start_button'),
@@ -136,6 +136,7 @@ def multi_process_capture(source_face : Face, webcam_capture : cv2.VideoCapture,
 						continue
 				if facefusion.globals.streamImage is not None and facefusion.globals.isRunning:
 					capture_frame = facefusion.globals.streamImage
+					facefusion.globals.streamImage = None
 				if analyse_stream(capture_frame, webcam_fps):
 					return
 				future = executor.submit(process_stream_frame, source_face, capture_frame)
