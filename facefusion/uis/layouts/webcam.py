@@ -20,15 +20,27 @@ def pre_check() -> bool:
 def pre_render() -> bool:
 	return True
 
+imageInUse = 'None'
+
 def switchToNana() -> None:
 	print('Na na')
-	# facefusion.globals.source_paths = ['./images/nana.jpg']
+	facefusion.globals.source_paths = ['./images/nana.jpg']
+	return 'Nana'
 def switchToRose() -> None:
 	print('Rose')
-	# facefusion.globals.source_paths = ['./images/rose.webp']
-def switchToJisoo() -> None:
+	facefusion.globals.source_paths = ['./images/rose.webp']
+	return 'Rose'
+def switchToJisoo() -> str:
 	print('Jisoo')
-	# facefusion.globals.source_paths = ['./images/jiso.jpg']
+	facefusion.globals.source_paths = ['./images/jiso.jpg']
+	return 'Jisoo'
+
+def reset() -> None:
+	print('Reset')
+	facefusion.globals.source_paths = []
+	return 'None'
+ 
+gradioLabel = None
 
 def render() -> gradio.Blocks:
 	with gradio.Blocks() as layout:
@@ -47,18 +59,23 @@ def render() -> gradio.Blocks:
 				with gradio.Blocks():
 					webcam.render()
 			with gradio.Column(scale=1):
+				with gradio.Blocks():
+					gradioLabel = gradio.Label(label='Image in use: ',value=imageInUse)
 				with gradio.Row():
 					with gradio.Blocks():
-						gradio.Button(value='Na na')
+						gradio.Button(value='Na na').click(switchToNana, outputs=gradioLabel)
 				with gradio.Row():
 					with gradio.Blocks():
-						gradio.Button(value='Rose')
+						gradio.Button(value='Rose').click(switchToRose, outputs=gradioLabel)
 				with gradio.Row():
 					with gradio.Blocks():
-						gradio.Button(value='Jisoo')
+						gradio.Button(value='Jisoo').click(switchToJisoo, outputs=gradioLabel)
 				with gradio.Row():
 					with gradio.Blocks():
 						source.render()
+				with gradio.Row():
+					with gradio.Blocks():
+						gradio.Button(value='Reset').click(reset, outputs=gradioLabel)
 			with gradio.Column(scale=1, visible=False):
 				# with gradio.Blocks():
 				# 	source.render()
