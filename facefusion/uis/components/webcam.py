@@ -35,7 +35,7 @@ def get_webcam_capture() -> Optional[cv2.VideoCapture]:
 		if platform.system().lower() == 'windows':
 			webcam_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 		else:
-			webcam_capture = cv2.VideoCapture('dealer-woman.mov')
+			webcam_capture = cv2.VideoCapture('dealer-woman-short.mp4')
 			print('webcam_capture', webcam_capture.isOpened())
 		if webcam_capture and webcam_capture.isOpened():
 			WEBCAM_CAPTURE = webcam_capture
@@ -162,7 +162,7 @@ def update() -> None:
 def stop() -> gradio.Image:
     webcam_capture = get_webcam_capture()
     facefusion.globals.current_time = webcam_capture.get(cv2.CAP_PROP_POS_FRAMES)
-    print('current_time', facefusion.globals.current_time)
+    print('current_time stop', facefusion.globals.current_time)
     clear_webcam_capture()
     return gradio.Image(value = None)
 
