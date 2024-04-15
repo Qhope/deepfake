@@ -5,3 +5,8 @@
 	overflow: hidden;
 	width: 100%;
 }
+
+.right-col {
+	/* min-width: unset !important; */
+	/* width: 150px !important; */
+}

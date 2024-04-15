@@ -57,3 +57,5 @@ ui_layouts : List[str] = []
 
 streamImage = None
 isRunning = False
+
+current_time = 0

@@ -35,7 +35,7 @@ def get_webcam_capture() -> Optional[cv2.VideoCapture]:
 		if platform.system().lower() == 'windows':
 			webcam_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 		else:
-			webcam_capture = cv2.VideoCapture('intro.mp4')
+			webcam_capture = cv2.VideoCapture('dealer-woman.mov')
 			print('webcam_capture', webcam_capture.isOpened())
 		if webcam_capture and webcam_capture.isOpened():
 			WEBCAM_CAPTURE = webcam_capture
@@ -57,8 +57,8 @@ def render() -> None:
 
 	WEBCAM_IMAGE = gradio.Image(
 		label = wording.get('uis.webcam_image'),
-		width=1280,
-		height=720
+		width=950,
+		height=550
 	)
 	WEBCAM_START_BUTTON = gradio.Button(
 		value = wording.get('uis.start_button'),
@@ -94,6 +94,7 @@ def listen() -> None:
 
 
 def start(webcam_mode : WebcamMode, webcam_resolution : str, webcam_fps : Fps) -> Generator[VisionFrame, None, None]:
+	print('webcam fps',webcam_fps)
 	facefusion.globals.face_selector_mode = 'one'
 	facefusion.globals.face_analyser_order = 'large-small'
 	source_image_paths = filter_image_paths(facefusion.globals.source_paths)
@@ -105,6 +106,9 @@ def start(webcam_mode : WebcamMode, webcam_resolution : str, webcam_fps : Fps) -
 		stream = open_stream(webcam_mode, webcam_resolution, webcam_fps) # type: ignore[arg-type]
 	webcam_width, webcam_height = unpack_resolution(webcam_resolution)
 	webcam_capture = get_webcam_capture()
+	if facefusion.globals.current_time is not None:
+		print('setting current time', facefusion.globals.current_time)
+		webcam_capture.set(cv2.CAP_PROP_POS_FRAMES, facefusion.globals.current_time)
 	if webcam_capture and webcam_capture.isOpened():
 		webcam_capture.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG')) # type: ignore[attr-defined]
 		webcam_capture.set(cv2.CAP_PROP_FRAME_WIDTH, webcam_width)
@@ -128,15 +132,11 @@ def multi_process_capture(source_face : Face, webcam_capture : cv2.VideoCapture,
 			deque_capture_frames : Deque[VisionFrame] = deque()
 			capture_frame = None
 			while webcam_capture and webcam_capture.isOpened():
-				if not facefusion.globals.isRunning:
-					ret, capture_frame = webcam_capture.read()
-					if ret is False:
-						print('end of video, loop')
-						webcam_capture.set(cv2.CAP_PROP_POS_FRAMES,0)
-						continue
-				if facefusion.globals.streamImage is not None and facefusion.globals.isRunning:
-					capture_frame = facefusion.globals.streamImage
-					facefusion.globals.streamImage = None
+				ret, capture_frame = webcam_capture.read()
+				if ret is False:
+					print('end of video, loop')
+					webcam_capture.set(cv2.CAP_PROP_POS_FRAMES,0)
+					continue
 				if analyse_stream(capture_frame, webcam_fps):
 					return
 				future = executor.submit(process_stream_frame, source_face, capture_frame)
@@ -160,8 +160,11 @@ def update() -> None:
 
 
 def stop() -> gradio.Image:
-	clear_webcam_capture()
-	return gradio.Image(value = None)
+    webcam_capture = get_webcam_capture()
+    facefusion.globals.current_time = webcam_capture.get(cv2.CAP_PROP_POS_FRAMES)
+    print('current_time', facefusion.globals.current_time)
+    clear_webcam_capture()
+    return gradio.Image(value = None)
 
 
 def process_stream_frame(source_face : Face, target_vision_frame : VisionFrame) -> VisionFrame:

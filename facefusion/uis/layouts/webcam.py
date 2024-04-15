@@ -20,25 +20,23 @@ def pre_check() -> bool:
 def pre_render() -> bool:
 	return True
 
-imageInUse = 'None'
-
-def switchToNana() -> None:
-	print('Na na')
-	facefusion.globals.source_paths = ['./images/nana.jpg']
-	return 'Nana'
-def switchToRose() -> None:
-	print('Rose')
-	facefusion.globals.source_paths = ['./images/rose.webp']
-	return 'Rose'
+def switchToRihana() -> None:
+	print('Rihana')
+	facefusion.globals.source_paths = ['./images/rihana.jpeg']
+	return './images/rihana.jpeg'
+def switchToTaylor() -> None:
+	print('Taylor')
+	facefusion.globals.source_paths = ['./images/taylor_aligned.png']
+	return './images/taylor_aligned.png'
 def switchToJisoo() -> str:
 	print('Jisoo')
-	facefusion.globals.source_paths = ['./images/jiso.jpg']
-	return 'Jisoo'
+	facefusion.globals.source_paths = ['./images/jiso.webp']
+	return './images/jiso.webp'
 
 def reset() -> None:
 	print('Reset')
 	facefusion.globals.source_paths = []
-	return 'None'
+	return None
  
 gradioLabel = None
 
@@ -58,24 +56,26 @@ def render() -> gradio.Blocks:
 			with gradio.Column(scale = 6):
 				with gradio.Blocks():
 					webcam.render()
-			with gradio.Column(scale=1):
+			with gradio.Column(scale=1,elem_classes='right-col'):
 				with gradio.Blocks():
-					gradioLabel = gradio.Label(label='Image in use: ',value=imageInUse)
+					gradio.Image(label='Original face', value='./images/original.png')	
+				with gradio.Blocks():
+					gradioLabel = gradio.Image(label='Target face')
 				with gradio.Row():
 					with gradio.Blocks():
-						gradio.Button(value='Na na').click(switchToNana, outputs=gradioLabel)
+						gradio.Button(value='Jisoo',size='sm').click(switchToJisoo, outputs=gradioLabel)
 				with gradio.Row():
 					with gradio.Blocks():
-						gradio.Button(value='Rose').click(switchToRose, outputs=gradioLabel)
+						gradio.Button(value='Rihana',size='sm').click(switchToRihana, outputs=gradioLabel)
 				with gradio.Row():
 					with gradio.Blocks():
-						gradio.Button(value='Jisoo').click(switchToJisoo, outputs=gradioLabel)
-				with gradio.Row():
+						gradio.Button(value='Taylor Swift',size='sm').click(switchToTaylor, outputs=gradioLabel) 
+				with gradio.Row(visible=False):
 					with gradio.Blocks():
 						source.render()
 				with gradio.Row():
 					with gradio.Blocks():
-						gradio.Button(value='Reset').click(reset, outputs=gradioLabel)
+						gradio.Button(value='Reset',size='sm').click(reset, outputs=gradioLabel)
 			with gradio.Column(scale=1, visible=False):
 				# with gradio.Blocks():
 				# 	source.render()
@@ -161,8 +161,8 @@ def runUi(ui : gradio.Blocks):
  
 def run(ui : gradio.Blocks) -> None:
     # create new thread for the websocket server
-	thread = threading.Thread(target=start_server)
-	thread.start()
-	print("Thread started")
+	# thread = threading.Thread(target=start_server)
+	# thread.start()
+	# print("Thread started")
 	# thread.join()
 	runUi(ui)
