@@ -132,6 +132,7 @@ def multi_process_capture(source_face : Face, webcam_capture : cv2.VideoCapture,
 			deque_capture_frames : Deque[VisionFrame] = deque()
 			capture_frame = None
 			while webcam_capture and webcam_capture.isOpened():
+				facefusion.globals.current_time = webcam_capture.get(cv2.CAP_PROP_POS_FRAMES)
 				ret, capture_frame = webcam_capture.read()
 				if ret is False:
 					print('end of video, loop')
@@ -161,8 +162,7 @@ def update() -> None:
 
 def stop() -> gradio.Image:
     webcam_capture = get_webcam_capture()
-    facefusion.globals.current_time = webcam_capture.get(cv2.CAP_PROP_POS_FRAMES)
-    print('current_time stop', facefusion.globals.current_time)
+    # facefusion.globals.current_time = webcam_capture.get(cv2.CAP_PROP_POS_FRAMES)
     clear_webcam_capture()
     return gradio.Image(value = None)
 

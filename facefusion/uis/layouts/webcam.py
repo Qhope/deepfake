@@ -23,25 +23,20 @@ def pre_render() -> bool:
 
 
 def switchToRihana() -> None:
-	webcam.stop()
 	print('Rihana')
 	facefusion.globals.source_paths = ['./images/rihana.jpeg']
-	print('start stream')
 	return './images/rihana.jpeg'
 
 def switchToTaylor() -> None:
-	webcam.stop()
 	print('Taylor')
 	facefusion.globals.source_paths = ['./images/taylor_aligned.png']
 	return './images/taylor_aligned.png'
 def switchToJisoo() -> str:
-	webcam.stop()
 	print('Jisoo')
 	facefusion.globals.source_paths = ['./images/jiso.webp']
 	return './images/jiso.webp'
 
 def reset() -> None:
-	webcam.stop()
 	print('Reset')
 	facefusion.globals.source_paths = []
 	return None
