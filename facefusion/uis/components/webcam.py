@@ -35,7 +35,7 @@ def get_webcam_capture() -> Optional[cv2.VideoCapture]:
 		if platform.system().lower() == 'windows':
 			webcam_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 		else:
-			webcam_capture = cv2.VideoCapture('dealer-short-1.mp4')
+			webcam_capture = cv2.VideoCapture('demo-1.MOV')
 			print('webcam_capture', webcam_capture.isOpened())
 		if webcam_capture and webcam_capture.isOpened():
 			WEBCAM_CAPTURE = webcam_capture
@@ -57,8 +57,8 @@ def render() -> None:
 
 	WEBCAM_IMAGE = gradio.Image(
 		label = wording.get('uis.webcam_image'),
-		width=950,
-		height=550
+		width=432,
+		height=768
 	)
 	WEBCAM_START_BUTTON = gradio.Button(
 		value = wording.get('uis.start_button'),

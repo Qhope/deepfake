@@ -28,11 +28,11 @@ def switchToRihana() -> None:
 	return './images/rihana.jpeg'
 
 def switchToTaylor() -> None:
-	print('Taylor')
-	facefusion.globals.source_paths = ['./images/taylor_aligned.png']
-	return './images/taylor_aligned.png'
+	print('jp1_aligned')
+	facefusion.globals.source_paths = ['./images/jp1_aligned.png']
+	return './images/jp1_aligned.png'
 def switchToJisoo() -> str:
-	print('Jisoo')
+	print('isoo')
 	facefusion.globals.source_paths = ['./images/jiso.webp']
 	return './images/jiso.webp'
 
@@ -61,18 +61,18 @@ def render() -> gradio.Blocks:
 					webcam.render()
 			with gradio.Column(scale=1,elem_classes='right-col'):
 				with gradio.Blocks():
-					gradio.Image(label='Original face', value='./images/original.png')	
+					gradio.Image(label='Original face', value='./images/ha.jpg')	
 				with gradio.Blocks():
 					gradioLabel = gradio.Image(label='Target face')
 				with gradio.Row():
 					with gradio.Blocks():
-						gradio.Button(value='Jisoo',size='sm').click(switchToJisoo, outputs=gradioLabel)
+						gradio.Button(value='Nana',size='sm').click(switchToJisoo, outputs=gradioLabel)
+				# with gradio.Row():
+				# 	with gradio.Blocks():
+				# 		gradio.Button(value='Rihana',size='sm').click(switchToRihana, outputs=gradioLabel)
 				with gradio.Row():
 					with gradio.Blocks():
-						gradio.Button(value='Rihana',size='sm').click(switchToRihana, outputs=gradioLabel)
-				with gradio.Row():
-					with gradio.Blocks():
-						gradio.Button(value='Taylor Swift',size='sm').click(switchToTaylor, outputs=gradioLabel) 
+						gradio.Button(value='Nonomi Sasaki',size='sm').click(switchToTaylor, outputs=gradioLabel) 
 				with gradio.Row(visible=False):
 					with gradio.Blocks():
 						source.render()
